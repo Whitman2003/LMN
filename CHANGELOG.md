@@ -8,6 +8,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Added
+- Added a file to create the sql database and tables called db_scripts.sql
 
 ### Changed
 
