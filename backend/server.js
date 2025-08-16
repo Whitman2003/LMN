@@ -24,6 +24,7 @@ app.get('/api/v1', (req, res) => {
 
 // Test Route for DB
 app.get('/api/v1/test-db', async (req, res) => {
+    console.log(process.env.DB_HOST);
     let connection;
     try {
         connection = await pool.getConnection();
