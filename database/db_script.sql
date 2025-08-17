@@ -13,7 +13,7 @@ Create Table IF NOT EXISTS tblUsers (
     UserName VARCHAR(100) NOT NULL,
     UserEmail VARCHAR(100) NOT NULL UNIQUE,
     UserPassword VARCHAR(100) NOT NULL,
-    UserPhone VARCHAR(15),
+    UserPhone VARCHAR(10),
     SessionID CHAR(36),
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

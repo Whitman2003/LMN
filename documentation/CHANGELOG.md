@@ -9,6 +9,8 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 
 ### Added
 - Added a file to create the sql database and tables called db_scripts.sql
+- Backend now connects to the database.
+- Added an API to create a user.
 
 ### Changed
 
