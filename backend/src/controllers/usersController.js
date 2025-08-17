@@ -50,3 +50,48 @@ exports.createUser = async (req, res) => {
         if (connection) connection.release();
     }
 };
+
+exports.signIn = async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        // Check if the user exists
+        try {
+            const user = await connection.query('SELECT * FROM tblUsers WHERE UserName = ?', [username]);
+            if (!user || user.length === 0) {
+                return res.status(401).json({ message: 'Invalid username or password' });
+            }
+
+            // Check if the password is correct
+            const isPasswordValid = await bcrypt.compare(password, user[0].UserPassword);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: 'Invalid username or password' });
+            }
+
+            //Create a new session
+            const sessionID = uuidv4();
+            try {
+                await connection.query('INSERT INTO tblSessions (SessionID, UserID, CreatedAt, ExpiresAt) VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR))', [sessionID, user[0].UserID]);
+                res.status(200).json({ message: 'Sign in successful', userId: user[0].UserID });
+            } catch (error) {
+                console.error('Error creating session:', error);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        } catch (error) {
+            console.error('Error checking user:', error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    } catch (error) {
+        console.error('Error signing in:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    } finally {
+        if (connection) connection.release();
+    }
+}
