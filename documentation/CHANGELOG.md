@@ -13,6 +13,9 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Added an API to create a user.
 - Added an API to sign in as a user.
 - Added an API to get dashboard access.
+- Set up the frontend (React, Bootstrap, Vite)
+- Changed the title of the page to match.
+- Changed the icon of the page to match.
 
 ### Changed
 
