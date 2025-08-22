@@ -16,6 +16,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Set up the frontend (React, Bootstrap, Vite)
 - Changed the title of the page to match.
 - Changed the icon of the page to match.
+- Designed the navbar for the landing page.
 
 ### Changed
 
