@@ -1,9 +1,9 @@
-export default function LandingNavbar() {
+export default function LandingNavbar({ setActive }) {
     return (
         <nav className="navbar navbar-expand-md navbar-light bg-light py-3 fixed-top">
             <div className="container-fluid">
                 {/* Logo */}
-                <a className="me-5" href="#home">
+                <a className="me-5" onClick={() => setActive('home')} style={{ cursor: 'pointer' }}>
                     <img src="/LMN.svg" alt="Logo" className="img-fluid d-inline-block align-text-top me-2" style={{ maxWidth: '60px', height: 'auto' }} />
                 </a>
 
@@ -15,19 +15,19 @@ export default function LandingNavbar() {
                 {/* Navigation Links */}
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="nav ms-auto justify-content-center fs-5 fs-md-4 fs-lg-3">
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><a className="text-decoration-none text-dark" href="#home">Home</a></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><a className="text-decoration-none text-dark" href="#about">About</a></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><a className="text-decoration-none text-dark" href="#services">Services</a></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><a className="text-decoration-none text-dark" href="#contact">Contact</a></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><a className="text-decoration-none text-dark" href="#careers">Careers</a></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><a className="text-decoration-none text-dark" href="#contact">Contact Us</a></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><a className="text-decoration-none text-dark" href="#faq">FAQ</a></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("home")}>Home</span></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("about")}>About</span></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("services")}>Services</span></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("contact")}>Contact</span></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("careers")}>Careers</span></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("contact")}>Contact Us</span></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("faq")}>FAQ</span></li>
                     </ul>
                     
                     {/* Auth Links */}
                     <div className="d-flex">
-                        <a href="#login" className="btn btn-primary me-3">Log In</a>
-                        <a href="#signup" className="btn btn-secondary">Sign Up</a>
+                        <button onClick={() => setActive("login")} className="btn btn-primary me-3">Log In</button>
+                        <button onClick={() => setActive("signup")} className="btn btn-secondary">Sign Up</button>
                     </div>
                 </div>
             </div>
