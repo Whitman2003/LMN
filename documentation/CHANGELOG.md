@@ -20,6 +20,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Added a "Services" page to the landng page.
 - Added an "About" page to the landing page.
 - Added a "Home" page to the landing page.
+- Added a "Careers", "Contact", and "FAQs" page to the landing page.
 
 ### Changed
 

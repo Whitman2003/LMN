@@ -19,9 +19,8 @@ export default function LandingNavbar({ setActive }) {
                         <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("about")}>About</span></li>
                         <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("services")}>Services</span></li>
                         <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("contact")}>Contact</span></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("careers")}>Careers</span></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("contact")}>Contact Us</span></li>
-                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("faq")}>FAQ</span></li>
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("careers")}>Careers</span></li>                        
+                        <li className="nav-item me-2 me-md-3 me-lg-4"><span className="text-decoration-none text-dark" style={{ cursor: "pointer"}} onClick={() => setActive("faqs")}>FAQs</span></li>
                     </ul>
                     
                     {/* Auth Links */}
