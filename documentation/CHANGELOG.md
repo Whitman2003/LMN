@@ -17,6 +17,9 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Changed the title of the page to match.
 - Changed the icon of the page to match.
 - Designed the navbar for the landing page.
+- Added a "Services" page to the landng page.
+- Added an "About" page to the landing page.
+- Added a "Home" page to the landing page.
 
 ### Changed
 

@@ -3,6 +3,7 @@ import './App.css'
 import LandingNavbar from './components/landing/LandingNavbar.jsx'
 import LandingHome from './components/landing/LandingHome.jsx'
 import LandingAbout from './components/landing/LandingAbout.jsx'
+import LandingServices from './components/landing/LandingServices.jsx'
 
 function App() {
   const [active, setActive] = useState('home');
@@ -12,6 +13,7 @@ function App() {
       <LandingNavbar setActive={setActive} />
       {active === 'home' && <LandingHome />}
       {active === 'about' && <LandingAbout />}
+      {active === 'services' && <LandingServices />}
     </div>
   )
 }
