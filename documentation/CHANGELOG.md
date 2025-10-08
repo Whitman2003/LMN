@@ -22,6 +22,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Added a "Home" page to the landing page.
 - Added a "Careers", "Contact", and "FAQs" page to the landing page.
 - Designed the Sign Up modal.
+- Set up checks in the sign up.
 
 ### Changed
 
