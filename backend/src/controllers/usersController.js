@@ -5,10 +5,10 @@ const { v4: uuidv4 } = require('uuid');
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
 exports.createUser = async (req, res) => {
-    const { username, email, password, confirmPassword, phone } = req.body;
+    const { username, email, password, confirmPassword, phone, fname, lname, addressLine1, addressLine2, city, state, zip } = req.body;
 
     //All are required except for phone (used for optional contact)
-    if (!username || !email || !password || !confirmPassword) {
+    if (!username || !email || !password || !confirmPassword || !fname || !lname || !addressLine1 || !city || !state || !zip) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -18,6 +18,14 @@ exports.createUser = async (req, res) => {
 
     if (!passwordRegex.test(password)) {
         return res.status(400).json({ message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character' });
+    }
+
+    if (phone.length != 10) {
+        return res.status(400).json({ message: 'Phone number must be 10 digits' });
+    }
+
+    if (zip.length != 5) {
+        return res.status(400).json({ message: 'ZIP code must be 5 digits' });
     }
 
     let connection;
@@ -39,11 +47,21 @@ exports.createUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const userId = uuidv4(); // Generate a unique user ID
 
+        //Insert the new user into the database
         try {
-            const result = await connection.query('INSERT INTO tblUsers (UserID, UserName, UserEmail, UserPassword, UserPhone) VALUES (?, ?, ?, ?, ?)', [userId, username, email, hashedPassword, phone]);
-            res.status(201).json({ message: 'User created successfully' });
+            const result = await connection.query('INSERT INTO tblUsers (UserID, UserName, UserEmail, UserPassword, UserPhone, UserFirstName, UserLastName) VALUES (?, ?, ?, ?, ?)', [userId, username, email, hashedPassword, phone, fname, lname]);
         } catch (error) {
             console.error('Error creating user:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+
+        //Insert the address into the database
+        try {
+            const addressID = uuidv4();
+            const addressResult = await connection.query('INSERT INTO tblAddresses (AddressID, UserID, StreetAddressLine1, StreetAddressLine2, City, State, ZipCode) VALUES (?, ?, ?, ?, ?, ?, ?)', [addressID, userId, addressLine1, addressLine2, city, state, zip]);
+            res.status(201).json({ message: 'User created successfully', userId: userId });
+        } catch (error) {
+            console.error('Error creating address:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
     } finally {
