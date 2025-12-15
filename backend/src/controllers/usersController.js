@@ -6,9 +6,10 @@ const { v4: uuidv4 } = require('uuid');
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
 exports.createUser = async (req, res) => {
-    const { username, email, password, confirmPassword, phone, fname, lname, addressLine1, addressLine2, city, state, zip } = req.body;
+    const { username, email, password, confirmPassword, phone, fName, lName, addressLine1, addressLine2, city, state, zip } = req.body;
     //All are required except for phone (used for optional contact)
-    if (!username || !email || !password || !confirmPassword || !fname || !lname || !addressLine1 || !city || !state || !zip) {
+    console.log(req.body);
+    if (!username || !email || !password || !confirmPassword || !fName || !lName || !addressLine1 || !city || !state || !zip) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -49,7 +50,7 @@ exports.createUser = async (req, res) => {
 
         //Insert the new user into the database
         try {
-            const result = await connection.query('INSERT INTO tblUsers (UserID, UserName, UserEmail, UserPassword, UserPhone, UserFirstName, UserLastName) VALUES (?, ?, ?, ?, ?, ?, ?)', [userId, username, email, hashedPassword, phone, fname, lname]);
+            const result = await connection.query('INSERT INTO tblUsers (UserID, UserName, UserEmail, UserPassword, UserPhone, UserFirstName, UserLastName) VALUES (?, ?, ?, ?, ?, ?, ?)', [userId, username, email, hashedPassword, phone, fName, lName]);
         } catch (error) {
             console.error('Error creating user:', error);
             res.status(500).json({ message: 'Internal server error' });
