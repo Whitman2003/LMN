@@ -23,6 +23,9 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Added a "Careers", "Contact", and "FAQs" page to the landing page.
 - Designed the Sign Up modal.
 - Set up checks in the sign up.
+- Sign Up API now adds more information.
+- Frontend now successfully connects with the API for Signing Up.
+- Frontend Login is Set Up.
 
 ### Changed
 

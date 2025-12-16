@@ -5,18 +5,18 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 export default function SignUp({ show, onClose }) {
     if (!show) return null;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const form = e.target;
 
         const formData = {
             username: form.username.value.trim(),
-            email: form.email.value.trim(),
+            email: form.email.value.trim().toLowerCase(),
             password: form.password.value.trim(),
             confirmPassword: form.confirmPassword.value.trim(),
-            firstName: form.firstName.value.trim(),
-            lastName: form.lastName.value.trim(),
+            fName: form.fName.value.trim(),
+            lName: form.lName.value.trim(),
             phone: form.phone.value.trim(),
             addressLine1: form.addressLine1.value.trim(),
             addressLine2: form.addressLine2.value.trim(),
@@ -25,32 +25,54 @@ export default function SignUp({ show, onClose }) {
             zip: form.zip.value.trim(),
         };
 
-        if (!username || !email || !password || !confirmPassword || !firstName || !lastName || !phone || !addressLine1 || !city || !state || !zip) {
+        const { username, email, password, confirmPassword, fName, lName, phone, addressLine1, city, state, zip } = formData;
+
+        if (!username || !email || !password || !confirmPassword || !fName || !lName || !phone || !addressLine1 || !city || !state || !zip) {
             alert("Please fill in all required fields.");
             return;
         }
 
-        if (formData.password !== formData.confirmPassword) {
+        if (password !== confirmPassword) {
             alert("Passwords do not match.");
             return;
         }
 
-        if (!passwordRegex.test(formData.password)) {
+        if (!passwordRegex.test(password)) {
             alert("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
             return;
         }
 
-        if (!phoneRegex.test(formData.phone)) {
+        if (!phoneRegex.test(phone)) {
             alert("Please enter a valid 10-digit phone number.");
             return;
         }
 
-        if (!zipRegex.test(formData.zip)) {
+        if (!zipRegex.test(zip)) {
             alert("Please enter a valid ZIP or postal code.");
             return;
         }
 
-        alert("Form submitted successfully!");
+        try {
+            const response = await fetch("http://localhost:5000/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(`Sign up unsuccessful! ${result.message}`);
+                return;
+            }
+
+            alert("Sign up successful!");
+        } catch (error) {
+            console.error("Error during sign up:", error);
+            alert("An error occurred during sign up. Please try again later.");
+        }
     };
 
     return (
@@ -88,12 +110,12 @@ export default function SignUp({ show, onClose }) {
 
                                 <div className="row mb-3">
                                     <div className="col-md-6 text-start">
-                                        <label htmlFor="firstName" className="form-label mt-3">First Name</label>
-                                        <input type="text" className="form-control" id="firstName" placeholder="Enter first name" required/>
+                                        <label htmlFor="fName" className="form-label mt-3">First Name</label>
+                                        <input type="text" className="form-control" id="fName" placeholder="Enter first name" required/>
                                     </div>
                                     <div className="col-md-6 text-start">
-                                        <label htmlFor="lastName" className="form-label mt-3">Last Name</label>
-                                        <input type="text" className="form-control" id="lastName" placeholder="Enter last name" required/>
+                                        <label htmlFor="lName" className="form-label mt-3">Last Name</label>
+                                        <input type="text" className="form-control" id="lName" placeholder="Enter last name" required/>
                                     </div>
                                 </div>
 

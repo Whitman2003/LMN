@@ -1,8 +1,10 @@
 import { useState } from "react";
 import SignUp from "./SignUp";
+import Login from "./Login";
 
 export default function LandingNavbar({ setActive }) {
     const [showSignUp, setShowSignUp] = useState(false);
+    const [showLogIn, setShowLogIn] = useState(false);
 
     return (
         <>
@@ -31,7 +33,7 @@ export default function LandingNavbar({ setActive }) {
                         
                         {/* Auth Links */}
                         <div className="d-flex">
-                            <button onClick={() => setActive("login")} className="btn btn-primary me-3">Log In</button>
+                            <button onClick={() => setShowLogIn(true)} className="btn btn-primary me-3">Log In</button>
                             <button onClick={() => setShowSignUp(true)} className="btn btn-secondary">Sign Up</button>
                         </div>
                     </div>
@@ -40,6 +42,9 @@ export default function LandingNavbar({ setActive }) {
 
             {/* Sign Up Modal */}
             <SignUp show={showSignUp} onClose={() => setShowSignUp(false)} />
+
+            {/* Log In Modal */}
+            <Login show={showLogIn} onClose={() => setShowLogIn(false)} />
         </>
     );
 }
