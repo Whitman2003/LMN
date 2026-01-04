@@ -98,10 +98,18 @@ exports.signIn = async (req, res) => {
             const sessionID = uuidv4();
             try {
                 await connection.query('INSERT INTO tblSessions (SessionID, UserID, CreatedAt, ExpiresAt) VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 1 HOUR))', [sessionID, user[0].UserID]);
-                res.status(200).json({ message: 'Sign in successful', userId: user[0].UserID });
             } catch (error) {
                 console.error('Error creating session:', error);
-                return res.status(500).json({ message: 'Internal server error' });
+                return res.status(500).json({ message: 'Error creating session.' });
+            }
+
+            //Add the session into the user table
+            try {
+                await connection.query('UPDATE tblUsers SET SessionID = ? WHERE UserID = ?', [sessionID, user[0].UserID]);
+                res.status(200).json({ message: 'Sign in successful', userId: user[0].UserID });
+            } catch (error) {
+                console.error('Error updating user session:', error);
+                return res.status(500).json({ message: 'Error setting sessionID in User.' });
             }
         } catch (error) {
             console.error('Error checking user:', error);
