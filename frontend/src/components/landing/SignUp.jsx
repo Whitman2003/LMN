@@ -89,47 +89,47 @@ export default function SignUp({ show, onClose }) {
                                 <div className="row mb-3">
                                     <div className="col-md-6 text-start">
                                         <label htmlFor="username" className="form-label">Username</label>
-                                        <input type="text" className="form-control" id="username" placeholder="Enter username" required/>
+                                        <input type="text" className="form-control" id="username" placeholder="Enter username" required aria-required="true"/>
                                     </div>
                                     <div className="col-md-6 text-start">
                                         <label htmlFor="email" className="form-label">Email address</label>
-                                        <input type="email" className="form-control" id="email" placeholder="Enter email" required/>
+                                        <input type="email" className="form-control" id="email" placeholder="Enter email" required aria-required="true"/>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col-md-6 text-start">
                                         <label htmlFor="password" className="form-label mt-3">Password</label>
-                                        <input type="password" className="form-control" id="password" placeholder="Enter password" required/>
+                                        <input type="password" className="form-control" id="password" placeholder="Enter password" required aria-required="true"/>
                                     </div>
                                     <div className="col-md-6 text-start">
                                         <label htmlFor="confirmPassword" className="form-label mt-3">Confirm Password</label>
-                                        <input type="password" className="form-control" id="confirmPassword" placeholder="Confirm password" required/>
+                                        <input type="password" className="form-control" id="confirmPassword" placeholder="Confirm password" required aria-required="true"/>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col-md-6 text-start">
                                         <label htmlFor="fName" className="form-label mt-3">First Name</label>
-                                        <input type="text" className="form-control" id="fName" placeholder="Enter first name" required/>
+                                        <input type="text" className="form-control" id="fName" placeholder="Enter first name" required aria-required="true"/>
                                     </div>
                                     <div className="col-md-6 text-start">
                                         <label htmlFor="lName" className="form-label mt-3">Last Name</label>
-                                        <input type="text" className="form-control" id="lName" placeholder="Enter last name" required/>
+                                        <input type="text" className="form-control" id="lName" placeholder="Enter last name" required aria-required="true"/>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="text-start">
                                         <label htmlFor="phone" className="form-label mt-3">Phone Number</label>
-                                        <input type="tel" className="form-control" id="phone" placeholder="Enter phone number. Ex 1234567890" required/>
+                                        <input type="tel" className="form-control" id="phone" placeholder="Enter phone number. Ex 1234567890" required aria-required="true"/>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col-md-12 text-start">
                                         <label htmlFor="addressLine1" className="form-label mt-3">Address Line 1</label>
-                                        <input type="text" className="form-control" id="addressLine1" placeholder="Enter address line 1" required/>
+                                        <input type="text" className="form-control" id="addressLine1" placeholder="Enter address line 1" required aria-required="true"/>
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
                                         <label htmlFor="addressLine2" className="form-label">Address Line 2</label>
@@ -137,11 +137,11 @@ export default function SignUp({ show, onClose }) {
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
                                         <label htmlFor="city" className="form-label">City</label>
-                                        <input type="text" className="form-control" id="city" placeholder="Enter city" required/>
+                                        <input type="text" className="form-control" id="city" placeholder="Enter city" required aria-required="true"/>
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
                                         <label htmlFor="state" className="form-label">State/Province</label>
-                                        <select className="form-select" id="state" required>
+                                        <select className="form-select" id="state" required aria-required="true">
                                             <option value="" disabled selected>Select state or province</option>
                                             <option value="AL">Alabama</option>
                                             <option value="AK">Alaska</option>
@@ -197,7 +197,7 @@ export default function SignUp({ show, onClose }) {
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
                                         <label htmlFor="zip" className="form-label">ZIP/Postal Code</label>
-                                        <input type="text" className="form-control" id="zip" placeholder="Enter ZIP or postal code" required/>
+                                        <input type="text" className="form-control" id="zip" placeholder="Enter ZIP or postal code" required aria-required="true"/>
                                     </div>
                                 </div>
                             </div>

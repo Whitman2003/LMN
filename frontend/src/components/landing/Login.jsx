@@ -57,14 +57,14 @@ export default function Login({show, onClose}) {
                                 <div className="row mb-3">
                                     <div className="text-start">
                                         <label htmlFor="username" className="form-label">Username</label>
-                                        <input type="text" className="form-control" id="username" placeholder="Enter username" required/>
+                                        <input type="text" className="form-control" id="username" placeholder="Enter username" required aria-required="true"/>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="text-start">
                                         <label htmlFor="password" className="form-label mt-3">Password</label>
-                                        <input type="password" className="form-control" id="password" placeholder="Enter password" required/>
+                                        <input type="password" className="form-control" id="password" placeholder="Enter password" required aria-required="true"/>
                                     </div>
                                 </div>
                             </div>

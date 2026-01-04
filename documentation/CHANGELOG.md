@@ -26,6 +26,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Sign Up API now adds more information.
 - Frontend now successfully connects with the API for Signing Up.
 - Frontend Login is Set Up.
+- Log In now adds a session.
 
 ### Changed
 
