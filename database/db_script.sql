@@ -17,6 +17,7 @@ Create Table IF NOT EXISTS tblUsers (
     UserLastName VARCHAR(50),
     UserPhone VARCHAR(10),
     SessionID CHAR(36),
+    isVerified BOOLEAN DEFAULT FALSE,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -38,5 +39,15 @@ Create Table IF NOT EXISTS tblAddress (
     City VARCHAR(100) NOT NULL,
     State VARCHAR(100) NOT NULL,
     ZipCode VARCHAR(20) NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES tblUsers(UserID) ON DELETE CASCADE
+);
+
+-- Verification Table
+Create Table IF NOT EXISTS tblEmailVerification (
+    VerificationID CHAR(36) PRIMARY KEY,
+    UserID CHAR(36) NOT NULL,
+    Token VARCHAR(100) NOT NULL,
+    ExpiresAt DATETIME NOT NULL,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (UserID) REFERENCES tblUsers(UserID) ON DELETE CASCADE
 );

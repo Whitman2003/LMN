@@ -1,4 +1,7 @@
+import nodemailer from 'nodemailer';
+
 require('dotenv').config();
+
 const bcrypt = require('bcrypt');
 const pool = require('../db/pool');
 const { v4: uuidv4 } = require('uuid');
@@ -60,11 +63,45 @@ exports.createUser = async (req, res) => {
         try {
             const addressID = uuidv4();
             const addressResult = await connection.query('INSERT INTO tblAddress (AddressID, UserID, StreetAddressLine1, StreetAddressLine2, City, State, ZipCode) VALUES (?, ?, ?, ?, ?, ?, ?)', [addressID, userId, addressLine1, addressLine2, city, state, zip]);
-            res.status(201).json({ message: 'User created successfully', userId: userId });
         } catch (error) {
             console.error('Error creating address:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
+
+        //Email Verification Process
+        const verificationToken = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit token
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        try {
+            await connection.query('INSERT INTO tblEmailVerification (VerificationID, UserID, Token, ExpiresAt) VALUES (?, ?, ?, ?)', [uuidv4(), userId, verificationToken, expiresAt]);
+
+            const transporter = nodemailer.createTransport({
+            host: process.env.SMPT_HOST,
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.SMPT_USER,
+                pass: process.env.SMPT_PASS
+                }
+            });
+        
+            const verificationUrl = `https://localhost:3000/verify-email?token=${verificationToken}`;
+
+            await transporter.sendMail({
+                from: '"LMN" <no-reply@LMN.com>',
+                to: email,
+                subject: 'Email Verification',
+                html: `<p>Please verify your email by using the number below:</p><h2>${verificationToken}</h2>`
+            });
+
+            res.status(201).json({ message: 'User created successfully, needs to verify.', userId: userId, verificationToken: verificationToken });
+        } catch (error) {
+            console.error('Error creating email verification:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: 'Internal server error' });
     } finally {
         if (connection) connection.release();
     }
@@ -122,3 +159,53 @@ exports.signIn = async (req, res) => {
         if (connection) connection.release();
     }
 }
+
+exports.verifyEmail = async (req, res) => {
+    const { token } = req.query;
+
+    if (!token) {
+        return res.status(400).json({ message: 'Verification token is required' });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        try {
+            const result = await connection.query('SELECT * FROM tblEmailVerification WHERE Token = ?', [token]);
+            if (!result || result.length === 0) {
+                return res.status(400).json({ message: 'Invalid verification token' });
+            }
+
+            const verification = result[0];
+
+            if (new Date(verification.ExpiresAt) < new Date()) {
+                return res.status(400).json({ message: 'Verification token has expired' });
+            }
+
+            try {
+                await connection.query('UPDATE tblUsers SET isVerified = TRUE WHERE UserID = ?', [verification.UserID]);
+            } catch (error) {
+                console.error('Error updating user verification status:', error);
+                return res.status(500).json({ message: 'Error updating user verification status.' });
+            }
+
+            try {
+                await connection.query('DELETE FROM tblEmailVerification WHERE VerificationID = ?', [verification.VerificationID]);
+            } catch (error) {
+                console.error('Error deleting verification record:', error);
+                return res.status(500).json({ message: 'Error deleting verification record.' });
+            }
+
+            res.status(200).json({ message: 'Email verified successfully' });
+        } catch (error) {
+            console.error('Error verifying token:', error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    } catch (error) {
+        console.error('Error verifying email:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    } finally {
+        if (connection) connection.release();
+    }
+};
