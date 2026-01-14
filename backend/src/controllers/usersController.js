@@ -1,17 +1,16 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+import pool from '../db/pool.js';
+import { v4 as uuidv4 } from 'uuid';
 
-require('dotenv').config();
-
-const bcrypt = require('bcrypt');
-const pool = require('../db/pool');
-const { v4: uuidv4 } = require('uuid');
+dotenv.config();
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
-exports.createUser = async (req, res) => {
+export const createUser = async (req, res) => {
     const { username, email, password, confirmPassword, phone, fName, lName, addressLine1, addressLine2, city, state, zip } = req.body;
     //All are required except for phone (used for optional contact)
-    console.log(req.body);
     if (!username || !email || !password || !confirmPassword || !fName || !lName || !addressLine1 || !city || !state || !zip) {
         return res.status(400).json({ message: 'All fields are required' });
     }
@@ -74,19 +73,17 @@ exports.createUser = async (req, res) => {
 
         try {
             await connection.query('INSERT INTO tblEmailVerification (VerificationID, UserID, Token, ExpiresAt) VALUES (?, ?, ?, ?)', [uuidv4(), userId, verificationToken, expiresAt]);
-
+            
             const transporter = nodemailer.createTransport({
-            host: process.env.SMPT_HOST,
+            host: process.env.SMTP_HOST,
             port: 587,
             secure: false,
             auth: {
-                user: process.env.SMPT_USER,
-                pass: process.env.SMPT_PASS
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
                 }
             });
         
-            const verificationUrl = `https://localhost:3000/verify-email?token=${verificationToken}`;
-
             await transporter.sendMail({
                 from: '"LMN" <no-reply@LMN.com>',
                 to: email,
@@ -107,7 +104,7 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.signIn = async (req, res) => {
+export const signIn = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -160,7 +157,7 @@ exports.signIn = async (req, res) => {
     }
 }
 
-exports.verifyEmail = async (req, res) => {
+export const verifyEmail = async (req, res) => {
     const { token } = req.query;
 
     if (!token) {
