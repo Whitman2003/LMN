@@ -76,8 +76,8 @@ export const createUser = async (req, res) => {
             
             const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS
@@ -85,7 +85,7 @@ export const createUser = async (req, res) => {
             });
         
             await transporter.sendMail({
-                from: '"LMN" <no-reply@LMN.com>',
+                from: process.env.SMTP_USER,
                 to: email,
                 subject: 'Email Verification',
                 html: `<p>Please verify your email by using the number below:</p><h2>${verificationToken}</h2>`
@@ -158,8 +158,9 @@ export const signIn = async (req, res) => {
 }
 
 export const verifyEmail = async (req, res) => {
-    const { token } = req.query;
-
+    var { token } = req.body.body;
+    token = String(token);
+    
     if (!token) {
         return res.status(400).json({ message: 'Verification token is required' });
     }

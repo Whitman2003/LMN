@@ -2,6 +2,8 @@ const phoneRegex = /^\d{10}$/;
 const zipRegex = /^\d{5}(-\d{4})?$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
+import Swal from 'sweetalert2';
+
 export default function SignUp({ show, onClose }) {
     if (!show) return null;
 
@@ -68,7 +70,57 @@ export default function SignUp({ show, onClose }) {
                 return;
             }
 
-            alert("Sign up successful!");
+            Swal.fire({
+                icon: 'success',
+                title: 'Sign up successful!  Please verify your email before signing in.',
+                input: 'text',
+                inputAttributes: {
+                    maxlength: 6,
+                    inputmode: 'numeric',
+                    pattern: '[0-9]*',
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
+                confirmButtonText: 'Verify Email',
+                cancelButtonText: 'Cancel',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                preConfirm: (verificationCode) => {
+                    if (!/^|d{6}$/.test(verificationCode)) {
+                        Swal.showValidationMessage('Please enter a valid 6-digit verification code.');
+                        return false;
+                    }
+                    return verificationCode;
+                }
+            }).then(async (swalResult) => {
+                if (swalResult.isConfirmed) {
+                    console.log(swalResult.value);
+                    const verifyResponse = await fetch("http://localhost:5000/api/users/verify", {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            body: swalResult.value,
+                        }),
+                    });
+                    const verifyResult = await verifyResponse.json();
+
+                    if (!verifyResponse.ok) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Verification Failed',
+                            text: verifyResult.message
+                        });
+                        return;
+                    }
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Email verified successfully! You can now sign in.'
+                    });
+                    onClose();
+                }
+            });
         } catch (error) {
             console.error("Error during sign up:", error);
             alert("An error occurred during sign up. Please try again later.");
