@@ -34,6 +34,7 @@ export const createUser = async (req, res) => {
     let connection;
     try {
         connection = await pool.getConnection();
+        await connection.beginTransaction();
 
         //Check if the Username or Email already exists
         try {
@@ -91,12 +92,14 @@ export const createUser = async (req, res) => {
                 html: `<p>Please verify your email by using the number below:</p><h2>${verificationToken}</h2>`
             });
 
+            await connection.commit();
             res.status(201).json({ message: 'User created successfully, needs to verify.', userId: userId, verificationToken: verificationToken });
         } catch (error) {
             console.error('Error creating email verification:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
     } catch (error) {
+        if (connection) await connection.rollback();
         console.error('Error creating user:', error);
         res.status(500).json({ message: 'Internal server error' });
     } finally {
