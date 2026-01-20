@@ -94,7 +94,6 @@ export default function SignUp({ show, onClose }) {
                 }
             }).then(async (swalResult) => {
                 if (swalResult.isConfirmed) {
-                    console.log(swalResult.value);
                     const verifyResponse = await fetch("http://localhost:5000/api/users/verify", {
                         method: "PUT",
                         headers: {
@@ -124,6 +123,104 @@ export default function SignUp({ show, onClose }) {
         } catch (error) {
             console.error("Error during sign up:", error);
             alert("An error occurred during sign up. Please try again later.");
+        }
+    };
+
+    const handleResend = async (e) => {
+        e.preventDefault();
+
+        const form = document.querySelector('form');
+        const formData = {
+            email: form.email.value.trim().toLowerCase(),
+            userId: form.username.value.trim(),
+        }
+
+        if (!formData.email || !formData.userId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please provide both username and email to resend verification code.'
+            });
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/api/users/resendVerification", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: result.message
+                });
+                return;
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Verification code resent! Please check your email.',
+                input: 'text',
+                inputAttributes: {
+                    maxlength: 6,
+                    inputmode: 'numeric',
+                    pattern: '[0-9]*',
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
+                confirmButtonText: 'Verify Email',
+                cancelButtonText: 'Cancel',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                preConfirm: (verificationCode) => {
+                    if (!/^|d{6}$/.test(verificationCode)) {
+                        Swal.showValidationMessage('Please enter a valid 6-digit verification code.');
+                        return false;
+                    }
+                    return verificationCode;
+                }
+            }).then(async (swalResult) => {
+                if (swalResult.isConfirmed) {
+                    const verifyResponse = await fetch("http://localhost:5000/api/users/verify", {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            body: swalResult.value,
+                        }),
+                    });
+                    const verifyResult = await verifyResponse.json();
+
+                    if (!verifyResponse.ok) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Verification Failed',
+                            text: verifyResult.message
+                        });
+                        return;
+                    }
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Email verified successfully! You can now sign in.'
+                    });
+                    onClose();
+                }
+            });
+        } catch (error) {
+            console.error("Error resending verification code:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while resending the verification code. Please try again later.'
+            });
         }
     };
 
@@ -255,6 +352,7 @@ export default function SignUp({ show, onClose }) {
                             </div>
 
                             <button type="submit" className="btn btn-primary w-100 mt-3">Sign Up</button>
+                            <button type="button" className="btn btn-secondary w-100 mt-2" onClick={handleResend}>Resend Code and Verify!</button>
                         </form>
                     </div>
                 </div>

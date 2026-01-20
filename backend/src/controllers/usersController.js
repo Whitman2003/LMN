@@ -210,3 +210,51 @@ export const verifyEmail = async (req, res) => {
         if (connection) connection.release();
     }
 };
+
+export const resendVerification = async (req, res) => {
+    const { userId, email } = req.body;
+
+    if (!userId || !email) {
+        return res.status(400).json({ message: 'User ID and email are required' });
+    }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        // Generate a new verification token
+        const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+
+        try {
+            // Insert the new token into the database
+            await connection.query('INSERT INTO tblEmailVerification (VerificationID, UserID, Token, ExpiresAt) VALUES (?, ?, ?, ?)', [uuidv4(), userId, verificationToken, expiresAt]);
+            const transporter = nodemailer.createTransport({
+                host: process.env.SMTP_HOST,
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASS
+                }
+            });
+
+            await transporter.sendMail({
+                from: process.env.SMTP_USER,
+                to: email,
+                subject: 'Resent Email Verification',
+                html: `<p>Please verify your email by using the number below:</p><h2>${verificationToken}</h2>`
+            });
+
+            res.status(200).json({ message: 'Verification email resent successfully', verificationToken: verificationToken });
+        } catch (error) {
+            console.error('Error resending verification email:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    } catch (error) {
+        console.error('Error in resendVerification:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    } finally {
+        if (connection) connection.release();
+    }
+};
