@@ -132,10 +132,10 @@ export default function SignUp({ show, onClose }) {
         const form = document.querySelector('form');
         const formData = {
             email: form.email.value.trim().toLowerCase(),
-            userId: form.username.value.trim(),
+            username: form.username.value.trim(),
         }
 
-        if (!formData.email || !formData.userId) {
+        if (!formData.email || !formData.username) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
