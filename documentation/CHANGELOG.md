@@ -27,6 +27,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Frontend now successfully connects with the API for Signing Up.
 - Frontend Login is Set Up.
 - Log In now adds a session.
+- We are now able to resend verification codes.
 
 ### Changed
 
