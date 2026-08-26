@@ -28,6 +28,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Frontend Login is Set Up.
 - Log In now adds a session.
 - We are now able to resend verification codes.
+- Users are now able to be verified.
 
 ### Changed
 

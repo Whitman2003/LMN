@@ -161,9 +161,8 @@ export const signIn = async (req, res) => {
 }
 
 export const verifyEmail = async (req, res) => {
-    var { token } = req.body.body;
-    token = String(token);
-    
+    var token = req.body.body;
+
     if (!token) {
         return res.status(400).json({ message: 'Verification token is required' });
     }
