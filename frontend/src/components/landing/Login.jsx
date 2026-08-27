@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router';
+
 export default function Login({show, onClose}) {
+    const navigate = useNavigate();
+
     if (!show) {
         return null;
     }
@@ -36,7 +40,7 @@ export default function Login({show, onClose}) {
                 return;
             }
 
-            alert("Login successful!");
+            navigate("/dashboard/profile");
         } catch (error) {
             console.error("Error during login:", error);
             alert("An error occurred during login. Please try again later.");

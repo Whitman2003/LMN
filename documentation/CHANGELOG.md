@@ -29,6 +29,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - Log In now adds a session.
 - We are now able to resend verification codes.
 - Users are now able to be verified.
+- Reformatted the frontend framework to set up future dashboard work.
 
 ### Changed
 
