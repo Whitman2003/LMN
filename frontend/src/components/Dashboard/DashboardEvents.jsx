@@ -1,7 +1,7 @@
-export default function DashboardProfile() {
+export default function DashboardEvents() {
     return (
         <div className="container mt-5">
-            <h1>Profile</h1>
+            <h>Events</h>
         </div>
     );
 }

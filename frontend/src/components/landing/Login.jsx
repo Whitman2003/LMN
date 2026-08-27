@@ -40,7 +40,7 @@ export default function Login({show, onClose}) {
                 return;
             }
 
-            navigate("/dashboard/profile");
+            navigate("/dashboard");
         } catch (error) {
             console.error("Error during login:", error);
             alert("An error occurred during login. Please try again later.");

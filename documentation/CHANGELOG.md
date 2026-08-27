@@ -30,6 +30,7 @@ and this project adhers to [Semantic Versioning](https://semver.org/)
 - We are now able to resend verification codes.
 - Users are now able to be verified.
 - Reformatted the frontend framework to set up future dashboard work.
+- Users can now login straight to the profile.
 
 ### Changed
 
