@@ -28,31 +28,37 @@ export default function SignUp({ show, onClose }) {
         };
 
         const { username, email, password, confirmPassword, fName, lName, phone, addressLine1, city, state, zip } = formData;
-
+        let validationErrors;
         if (!username || !email || !password || !confirmPassword || !fName || !lName || !phone || !addressLine1 || !city || !state || !zip) {
-            alert("Please fill in all required fields.");
+            validationErrors = "Please fill in all required fields.";
             return;
         }
 
         if (password !== confirmPassword) {
-            alert("Passwords do not match.");
+            validationErrors = "Passwords do not match.";
             return;
         }
 
         if (!passwordRegex.test(password)) {
-            alert("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
+            validationErrors = ("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
             return;
         }
 
         if (!phoneRegex.test(phone)) {
-            alert("Please enter a valid 10-digit phone number.");
+            validationErrors = "Please enter a valid 10-digit phone number.";
             return;
         }
 
         if (!zipRegex.test(zip)) {
-            alert("Please enter a valid ZIP or postal code.");
+            validationErrors = ("Please enter a valid ZIP or postal code.");
             return;
         }
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: validationErrors,
+        });
 
         try {
             const response = await fetch("http://localhost:5000/api/users", {
@@ -237,60 +243,69 @@ export default function SignUp({ show, onClose }) {
                             <div className="mb-3">
                                 <div className="row mb-3">
                                     <div className="col-md-6 text-start">
-                                        <label htmlFor="username" className="form-label">Username</label>
-                                        <input type="text" className="form-control" id="username" placeholder="Enter username" required aria-required="true"/>
+                                        <label htmlFor="username" className="form-label">Username <span className="text-danger">*</span></label>
+                                        <input type="text" autoComplete="username" className="form-control" id="username" placeholder="Enter username" required aria-required="true"/>
+                                        <div id="usernameHelp" className="form-text">Required</div>
                                     </div>
                                     <div className="col-md-6 text-start">
-                                        <label htmlFor="email" className="form-label">Email address</label>
-                                        <input type="email" className="form-control" id="email" placeholder="Enter email" required aria-required="true"/>
-                                    </div>
-                                </div>
-
-                                <div className="row mb-3">
-                                    <div className="col-md-6 text-start">
-                                        <label htmlFor="password" className="form-label mt-3">Password</label>
-                                        <input type="password" className="form-control" id="password" placeholder="Enter password" required aria-required="true"/>
-                                    </div>
-                                    <div className="col-md-6 text-start">
-                                        <label htmlFor="confirmPassword" className="form-label mt-3">Confirm Password</label>
-                                        <input type="password" className="form-control" id="confirmPassword" placeholder="Confirm password" required aria-required="true"/>
+                                        <label htmlFor="email" className="form-label">Email address <span className="text-danger">*</span></label>
+                                        <input type="email" autoComplete="email" className="form-control" id="email" placeholder="Enter email" required aria-required="true"/>
+                                        <div id="emailAddressHelp" className="form-text">Required</div>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col-md-6 text-start">
-                                        <label htmlFor="fName" className="form-label mt-3">First Name</label>
-                                        <input type="text" className="form-control" id="fName" placeholder="Enter first name" required aria-required="true"/>
+                                        <label htmlFor="password" className="form-label mt-3">Password <span className="text-danger">*</span></label>
+                                        <input type="password" autoComplete="current-password" className="form-control" id="password" placeholder="Enter password" required aria-required="true"/>
+                                        <div id="passwordHelp" className="form-text">Required</div>
                                     </div>
                                     <div className="col-md-6 text-start">
-                                        <label htmlFor="lName" className="form-label mt-3">Last Name</label>
-                                        <input type="text" className="form-control" id="lName" placeholder="Enter last name" required aria-required="true"/>
+                                        <label htmlFor="confirmPassword" className="form-label mt-3">Confirm Password <span className="text-danger">*</span></label>
+                                        <input type="password" autoComplete="current-password" className="form-control" id="confirmPassword" placeholder="Confirm password" required aria-required="true"/>
+                                        <div id="confirmPasswordHelp" className="form-text">Required</div>
+                                    </div>
+                                </div>
+
+                                <div className="row mb-3">
+                                    <div className="col-md-6 text-start">
+                                        <label htmlFor="fName" className="form-label mt-3">First Name <span className="text-danger">*</span></label>
+                                        <input type="text" autoComplete="firstName" className="form-control" id="fName" placeholder="Enter first name" required aria-required="true"/>
+                                        <div id="firstNameHelp" className="form-text">Required</div>
+                                    </div>
+                                    <div className="col-md-6 text-start">
+                                        <label htmlFor="lName" className="form-label mt-3">Last Name <span className="text-danger">*</span></label>
+                                        <input type="text" autoComplete="lastName" className="form-control" id="lName" placeholder="Enter last name" required aria-required="true"/>
+                                        <div id="lastNameHelp" className="form-text">Required</div>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="text-start">
-                                        <label htmlFor="phone" className="form-label mt-3">Phone Number</label>
-                                        <input type="tel" className="form-control" id="phone" placeholder="Enter phone number. Ex 1234567890" required aria-required="true"/>
+                                        <label htmlFor="phone" className="form-label mt-3">Phone Number <span className="text-danger">*</span></label>
+                                        <input type="tel" autoComplete="phone" className="form-control" id="phone" placeholder="Enter phone number. Ex 1234567890" required aria-required="true"/>
+                                        <div id="phoneHelp" className="form-text">Required</div>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="col-md-12 text-start">
-                                        <label htmlFor="addressLine1" className="form-label mt-3">Address Line 1</label>
-                                        <input type="text" className="form-control" id="addressLine1" placeholder="Enter address line 1" required aria-required="true"/>
+                                        <label htmlFor="addressLine1" className="form-label mt-3">Address Line 1 <span className="text-danger">*</span></label>
+                                        <input type="text" autoComplete="addressLine1" className="form-control" id="addressLine1" placeholder="Enter address line 1" required aria-required="true"/>
+                                        <div id="addressHelp" className="form-text">Required</div>
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
-                                        <label htmlFor="addressLine2" className="form-label">Address Line 2</label>
+                                        <label htmlFor="addressLine2" autoComplete="addressLine2" className="form-label">Address Line 2</label>
                                         <input type="text" className="form-control" id="addressLine2" placeholder="Apartment, suite, etc. (optional)"/>
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
-                                        <label htmlFor="city" className="form-label">City</label>
-                                        <input type="text" className="form-control" id="city" placeholder="Enter city" required aria-required="true"/>
+                                        <label htmlFor="city" className="form-label">City <span className="text-danger">*</span></label>
+                                        <input type="text" autoComplete="city" className="form-control" id="city" placeholder="Enter city" required aria-required="true"/>
+                                        <div id="cityHelp" className="form-text">Required</div>
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
-                                        <label htmlFor="state" className="form-label">State/Province</label>
-                                        <select className="form-select" id="state" required aria-required="true">
+                                        <label htmlFor="state" className="form-label">State/Province <span className="text-danger">*</span></label>
+                                        <select className="form-select" autoComplete="state" id="state" required aria-required="true">
                                             <option value="" disabled selected>Select state or province</option>
                                             <option value="AL">Alabama</option>
                                             <option value="AK">Alaska</option>
@@ -343,10 +358,12 @@ export default function SignUp({ show, onClose }) {
                                             <option value="WI">Wisconsin</option>
                                             <option value="WY">Wyoming</option>
                                         </select>
+                                        <div id="stateHelp" className="form-text">Required</div>
                                     </div>
                                     <div className="col-md-6 text-start mt-3">
-                                        <label htmlFor="zip" className="form-label">ZIP/Postal Code</label>
-                                        <input type="text" className="form-control" id="zip" placeholder="Enter ZIP or postal code" required aria-required="true"/>
+                                        <label htmlFor="zip" className="form-label">ZIP/Postal Code <span className="text-danger">*</span></label>
+                                        <input type="text" autoComplete="zip" className="form-control" id="zip" placeholder="Enter ZIP or postal code" required aria-required="true"/>
+                                        <div id="zipHelp" className="form-text">Required</div>
                                     </div>
                                 </div>
                             </div>

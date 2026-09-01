@@ -60,15 +60,17 @@ export default function Login({show, onClose}) {
                             <div className="mb-3">
                                 <div className="row mb-3">
                                     <div className="text-start">
-                                        <label htmlFor="username" className="form-label">Username</label>
-                                        <input type="text" className="form-control" id="username" placeholder="Enter username" required aria-required="true"/>
+                                        <label htmlFor="username" className="form-label">Username <span className="text-danger">*</span></label>
+                                        <input type="text" autoComplete="username" className="form-control" id="username" placeholder="Enter username" required aria-required="true"/>
+                                        <div id="usernameHelp" className="form-text">Required</div>
                                     </div>
                                 </div>
 
                                 <div className="row mb-3">
                                     <div className="text-start">
-                                        <label htmlFor="password" className="form-label mt-3">Password</label>
-                                        <input type="password" className="form-control" id="password" placeholder="Enter password" required aria-required="true"/>
+                                        <label htmlFor="password" className="form-label mt-3">Password <span className="text-danger">*</span></label>
+                                        <input type="password" autoComplete="current-password" className="form-control" id="password" placeholder="Enter password" required aria-required="true"/>
+                                        <div id="passwordHelp" className="form-text">Required</div>
                                     </div>
                                 </div>
                             </div>
